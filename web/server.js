@@ -79,10 +79,14 @@ const ROUTE = n => WEBROOT + 'routes/' + n;
 
 // attach routes
 const apiKeys = require(ROUTE('apiKeys'));
+const strategies = require(ROUTE('strategies'));
+
 router.get('/api/info', require(ROUTE('info')));
-router.get('/api/strategies', require(ROUTE('strategies')));
+router.get('/api/strategies', strategies.list);
+router.get('/api/strategies/:stratName', strategies.get);
 router.get('/api/configPart/:part', require(ROUTE('configPart')));
 router.get('/api/apiKeys', apiKeys.get);
+router.post('/api/strategies/:stratName', strategies.post);
 
 const listWraper = require(ROUTE('list'));
 router.get('/api/imports', listWraper('imports'));
