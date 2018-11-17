@@ -1,5 +1,4 @@
 <template lang='pug'>
-
   .grd
     .grd-row
       .grd-row-col-5-6.px1
@@ -14,9 +13,10 @@
     .grd-row
       .grd-row-col-5-6.px1
         div
-          textarea(rows=20).params(v-model='stratContent')
-        div
-          a.w100--s.btn--primary.save-btn(href='#', v-on:click.prevent='save') Save file
+          textarea.params(v-model='stratContent', rows=20)
+        div.txt--center
+          a.w100--s.btn--primary.save-btn(v-if='!saving', href='#', v-on:click.prevent='save') Save file
+          spinner(v-if='saving')
 </template>
 
 <script>
@@ -24,6 +24,7 @@
 import stratPicker from '../global/configbuilder/stratpicker.vue'
 import _ from 'lodash'
 import { get, post } from '../../tools/ajax'
+import spinner from '../global/blockSpinner.vue'
 
 export default {
   created: function() {
@@ -38,7 +39,11 @@ export default {
       strategy: 'MACD',
       strat: {},
       stratContent: '',
+      saving: false,
     }
+  },
+  components: {
+    spinner
   },
   watch: {
     strategy: function(strat) {
@@ -53,10 +58,13 @@ export default {
       });
     },
     save: function() {
+      this.saving = true;
       let data = { content: this.stratContent };
       let stratName = this.strat.name;
       post('strategies/' + stratName, data, (error, response) => {
         this.strat.isNew = false;
+        setTimeout(() => this.saving = false, 300);
+
         if(error)
           return alert(error);
       });
