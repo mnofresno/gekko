@@ -1,7 +1,7 @@
 <template lang='pug'>
   div
     h2.contain Strategy editor
-    config-builder(v-on:config='check')
+    config-builder()
 </template>
 
 <script>

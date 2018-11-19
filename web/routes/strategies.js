@@ -42,5 +42,11 @@ module.exports = {
     this.body = {
       content: stratContent
     };
-  }
+  },
+  remove: function *() {
+    let stratName = this.params.stratName;
+    let fileName = gekkoRoot + 'strategies/' + stratName + '.js';
+    directFs.unlink(fileName);
+    this.body = {status: 'ok'};
+  },
 }
