@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const fs = require('co-fs');
-const sFs = require('fs');
+const directFs = require('fs');
 
 const gekkoRoot = __dirname + '/../../';
 
@@ -31,7 +31,7 @@ module.exports = {
     let stratName = this.params.stratName;
     let fileName = gekkoRoot + 'strategies/' + stratName + '.js';
 
-    sFs.writeFileSync(fileName, this.request.body.content);
+    directFs.writeFileSync(fileName, this.request.body.content);
     this.body = {status: 'ok'};
   },
   get: function *() {
