@@ -105,7 +105,6 @@ router.post('/api/stopGekko', require(ROUTE('stopGekko')));
 router.post('/api/deleteGekko', require(ROUTE('deleteGekko')));
 router.post('/api/getCandles', require(ROUTE('getCandles')));
 
-
 // incoming WS:
 // wss.on('connection', ws => {
 //   ws.on('message', _.noop);

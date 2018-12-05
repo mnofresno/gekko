@@ -3,28 +3,40 @@
 
 // This config is used by both the frontend as well as the web server.
 // see https://gekko.wizb.it/docs/installation/installing_gekko_on_a_server.html#Configuring-Gekko
+
+var host = null;
+
+if (typeof window === 'undefined') {
+
 var program = require('commander');
+
 
 program.option('-p, --port <port>', 'HTTP Port')
   .option('--ui', 'launch a web UI')
   .option('-h, --host <host>', 'Hostname')
   .option('-s, --secrets <file>', 'Secrets file')
   .parse(process.argv);
+  port = program.port;
+  host = program.host;
+}
+else {
+  console.log(window.location);
+  host = window.location.hostname;
+}
 
-console.log('Http PORT:', program.port);
-console.log('Http HOST:', program.host);
+console.log('Http HOST:', host);
 
 const CONFIG = {
-  headless: false,
+  headless: true,
   api: {
     host: '127.0.0.1',
-    port: program.port,
+    port: program ? program.port : null,
     timeout: 120000 // 2 minutes
   },
   ui: {
-    ssl: false,
-    host: program.host,
-    port: 3000,
+    ssl: true,
+    host: host,
+    port: 443,
     path: '/'
   },
   adapter: 'mysql'
