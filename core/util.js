@@ -174,6 +174,9 @@ program
   .option('-b, --backtest', 'backtesting mode')
   .option('-i, --import', 'importer mode')
   .option('--ui', 'launch a web UI')
+  .option('-p, --port <port>', 'HTTP Port')
+  .option('-h, --host <host>', 'Hostname')
+  .option('-s, --secrets <file>', 'Secrets file')
   .parse(process.argv);
 
 // make sure the current node version is recent enough

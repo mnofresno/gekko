@@ -1,4 +1,10 @@
 var UIconfig = require('../vue/dist/UIconfig');
+var program = require('commander');
+console.log('Http PORT:', program.port);
+console.log('Http HOST:', program.host);
+
+UIconfig.api.port = program.port;
+UIconfig.ui.host = program.host;
 
 var config = {};
 

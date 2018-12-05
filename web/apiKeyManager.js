@@ -2,8 +2,11 @@ const fs = require('fs');
 const _ = require('lodash');
 const cache = require('./state/cache');
 const broadcast = cache.get('broadcast');
+var program = require('commander');
 
-const apiKeysFile = __dirname + '/../SECRET-api-keys.json';
+const apiKeysFile = __dirname + '/../' +  program.secrets;
+
+console.log('secrets: ', apiKeysFile);
 
 // on init:
 const noApiKeysFile = !fs.existsSync(apiKeysFile);
