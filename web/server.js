@@ -1,4 +1,7 @@
 const config = require('./vue/dist/UIconfig');
+var program = require('commander');
+config.api.port = program.port;
+config.ui.host = program.host;
 
 const koa = require('koa');
 const serve = require('koa-static');
