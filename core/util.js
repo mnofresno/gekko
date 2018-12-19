@@ -164,6 +164,9 @@ var util = {
   getStartTime: function() {
     return startTime;
   },
+  getProgram: function() {
+    return program;
+  },
 }
 
 // NOTE: those options are only used
@@ -174,7 +177,8 @@ program
   .option('-b, --backtest', 'backtesting mode')
   .option('-i, --import', 'importer mode')
   .option('--ui', 'launch a web UI')
-  .option('-p, --port <port>', 'HTTP Port')
+  .option('-ap, --apiPort <port>', 'HTTP API Port')
+  .option('-uip, --uiPort <port>', 'HTTP UI Port')
   .option('-h, --host <host>', 'Hostname')
   .option('-s, --secrets <file>', 'Secrets file')
   .parse(process.argv);
