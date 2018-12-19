@@ -80,6 +80,7 @@ const ROUTE = n => WEBROOT + 'routes/' + n;
 // attach routes
 const apiKeys = require(ROUTE('apiKeys'));
 const strategies = require(ROUTE('strategies'));
+const logfiles = require(ROUTE('logfiles'));
 
 router.get('/api/info', require(ROUTE('info')));
 router.get('/api/strategies', strategies.list);
@@ -104,6 +105,9 @@ router.post('/api/startGekko', require(ROUTE('startGekko')));
 router.post('/api/stopGekko', require(ROUTE('stopGekko')));
 router.post('/api/deleteGekko', require(ROUTE('deleteGekko')));
 router.post('/api/getCandles', require(ROUTE('getCandles')));
+
+router.get('/api/logfiles', logfiles.list);
+router.get('/api/logfiles/:id', logfiles.get);
 
 // incoming WS:
 // wss.on('connection', ws => {

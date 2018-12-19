@@ -56,12 +56,28 @@
           td
             template(v-if='!gekko.events.tradeCompleted') 0
             template(v-if='gekko.events.tradeCompleted') {{ gekko.events.tradeCompleted.length }}
+    h3 Log files
+    .text(v-if='!logfiles.length')
+      p You don't have any logfiles.
+    table.full(v-if='logfiles.length')
+      thead
+        tr
+          th type
+          th timestamp
+          th id
+      tbody
+        tr.clickable(v-for='logfile in logfiles')
+          td {{ logfile.type }}
+          td {{ logfile.timestamp }}
+          td <a v-bind:href="'api/logfiles/' + logfile.name">{{ logfile.id }}</a>
+    a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
     .hr
     h2 Start a new live Gekko
     router-link.btn--primary(to='/live-gekkos/new') Start a new live Gekko!
 </template>
 
 <script>
+import { get } from '../../tools/ajax'
 // global moment
 // global humanizeDuration
 
@@ -69,7 +85,8 @@ export default {
   created: function() {
     this.timer = setInterval(() => {
       this.now = moment();
-    }, 1000)
+    }, 1000);
+    this.updateLogfiles();
   },
   destroyed: function() {
     clearTimeout(this.timer);
@@ -77,7 +94,8 @@ export default {
   data: () => {
     return {
       timer: false,
-      now: moment()
+      now: moment(),
+      logfiles: [],
     }
   },
   computed: {
@@ -101,6 +119,11 @@ export default {
     }
   },
   methods: {
+    updateLogfiles: function() {
+      get('logfiles', (err, data) => {
+        this.logfiles = data;
+      });
+    },
     humanizeDuration: (n) => window.humanizeDuration(n),
     moment: mom => moment.utc(mom),
     fmt: mom => moment.utc(mom).format('YYYY-MM-DD HH:mm'),
