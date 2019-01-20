@@ -64,11 +64,13 @@
         tr
           th type
           th timestamp
+          th last modified
           th id
       tbody
         tr.clickable(v-for='logfile in logfiles')
           td {{ logfile.type }}
           td {{ logfile.timestamp }}
+          td {{ logfile.mtime }}
           td <a v-bind:href="'api/logfiles/' + logfile.name">{{ logfile.id }}</a>
     a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
     .hr

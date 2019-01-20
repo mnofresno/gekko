@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "name": "Launch Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/gekko.js",
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "args": [
+        "--ui",
+        "--apiPort", "3000",
+        "--uiPort", "3000",
+        "--host", "localhost",
+        "--secrets", "SECRET-api-keys.json"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      //"console": "internalConsole",
+      "sourceMaps": false,
+      "outFiles": []
+    }
+  ]
+}

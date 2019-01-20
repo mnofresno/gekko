@@ -1,29 +1,36 @@
+const moment = require('moment');
 const _ = require('lodash');
 const fs = require('co-fs');
-const gekkoRoot = __dirname + '/../../';
+const logsDir = __dirname + '/../../logs/';
 
 module.exports = {
   get: function* () {
     let id = this.params.id;
 
-    let fileName = gekkoRoot + 'logs/' + id + '.log';
+    let fileName = logsDir + id + '.log';
     let logContents = yield fs.readFile(fileName, "utf8");
     this.body = logContents;
   },
   list: function* () {
-    const logsDir = yield fs.readdir(gekkoRoot + 'logs');
-    const logs = logsDir
-      .filter(f => _.last(f, 4).join('') === '.log')
-      .map(f => {
-        const parts = f.split('-');
-        const type = parts[parts.length - 2];
-        return {
-          name: f.slice(0, -4),
-          timestamp: f.split('-' + type)[0],
-          type: type,
-          id: parts[parts.length - 1].slice(0, -4),
-        }
+    let page = this.params.page;
+    let items = this.params.items;
+    const logs = [];
+    const logFiles = (yield fs.readdir(logsDir))
+      .filter(f => _.last(f, 4).join('') === '.log');
+
+    for(let i = 0; i < logFiles.length; i++) {
+      let fileName = logFiles[i];
+      let stat = yield fs.stat(logsDir + fileName);
+      const parts = fileName.split('-');
+      const type = parts[parts.length - 2];
+      logs.push({
+        name: fileName.slice(0, -4),
+        timestamp: moment(fileName.split('-' + type)[0], 'HH:mm:ss'),
+        type: type,
+        id: parts[parts.length - 1].slice(0, -4),
+        mtime: moment(stat.mtime, 'HH:mm:ss'),
       });
-      this.body = logs;
+    }
+    this.body = logs;
    },
 };
