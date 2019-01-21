@@ -57,9 +57,9 @@
             template(v-if='!gekko.events.tradeCompleted') 0
             template(v-if='gekko.events.tradeCompleted') {{ gekko.events.tradeCompleted.length }}
     h3 Log files
-    .text(v-if='!logfiles.length')
+    .text(v-if='!logfiles.data.length')
       p You don't have any logfiles.
-    table.full(v-if='logfiles.length')
+    table.full(v-if='logfiles.data.length')
       thead
         tr
           th type
@@ -67,11 +67,14 @@
           th last modified
           th id
       tbody
-        tr.clickable(v-for='logfile in logfiles')
+        tr.clickable(v-for='logfile in logfiles.data')
           td {{ logfile.type }}
           td {{ logfile.timestamp }}
           td {{ logfile.mtime }}
           td <a v-bind:href="'api/logfiles/' + logfile.name">{{ logfile.id }}</a>
+      component(href='#', v-bind:is='logsPrevDisabled', v-on:click.prevent='logPrevPage') << prev
+      <span> {{logfiles.page}} / {{logfiles.total_pages}} </span>
+      component(href='#', v-bind:is='logsNextDisabled', v-on:click.prevent='logNextPage') next >>
     a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
     .hr
     h2 Start a new live Gekko
@@ -97,10 +100,20 @@ export default {
     return {
       timer: false,
       now: moment(),
-      logfiles: [],
+      logfiles: {
+        data: [],
+        total_pages: 0,
+        page: 1,
+      },
     }
   },
   computed: {
+    logsPrevDisabled: function() {
+      return this.logfiles.page == 1 ? 'span' : 'a';
+    },
+    logsNextDisabled: function() {
+      return this.logfiles.page == this.logfiles.total_pages ? 'span' : 'a';
+    },
     stratrunners: function() {
       return _.values(this.$store.state.gekkos)
         .concat(_.values(this.$store.state.archivedGekkos))
@@ -121,9 +134,17 @@ export default {
     }
   },
   methods: {
+    logNextPage: function() {
+      this.logfiles.page++;
+      this.updateLogfiles();
+    },
+    logPrevPage: function() {
+      this.logfiles.page--;
+      this.updateLogfiles();
+    },
     updateLogfiles: function() {
-      get('logfiles', (err, data) => {
-        this.logfiles = data;
+      get('logfiles?page=' +  this.logfiles.page, (err, response) => {
+        this.logfiles = response;
       });
     },
     humanizeDuration: (n) => window.humanizeDuration(n),
