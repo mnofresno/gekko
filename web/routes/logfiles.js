@@ -2,6 +2,7 @@ const moment = require('moment');
 const _ = require('lodash');
 const fs = require('co-fs');
 const logsDir = __dirname + '/../../logs/';
+const util = require('../../core/util');
 
 function getPaginatedItems(items, page) {
   var page = page || 1,
@@ -20,12 +21,14 @@ function getPaginatedItems(items, page) {
 module.exports = {
   get: function* () {
     let id = this.params.id;
+    let instanceName = util.getProgram().instanceName;
 
-    let fileName = logsDir + id + '.log';
+    let fileName = `${logsDir}${instanceName}-${id}.log`;
     let logContents = yield fs.readFile(fileName, "utf8");
     this.body = logContents;
   },
   list: function* () {
+    let instanceName = util.getProgram().instanceName;
     let page = parseInt(this.request.query.page);
     const logs = [];
     const logFiles = (yield fs.readdir(logsDir))
@@ -35,15 +38,17 @@ module.exports = {
       let fileName = logFiles[i];
       let stat = yield fs.stat(logsDir + fileName);
       const parts = fileName.split('-');
+      const fileInstanceName = parts.shift();
       const type = parts[parts.length - 2];
       logs.push({
-        name: fileName.slice(0, -4),
+        instanceName: fileInstanceName,
+        name: fileName.slice(0, -4).replace(fileInstanceName + '-', ''),
         timestamp: moment(fileName.split('-' + type)[0], 'HH:mm:ss'),
         type: type,
         id: parts[parts.length - 1].slice(0, -4),
         mtime: moment(stat.mtime, 'HH:mm:ss'),
       });
     }
-    this.body = getPaginatedItems(logs, page);
+    this.body = getPaginatedItems(_.filter(logs, x => x.instanceName === instanceName), page);
    },
 };

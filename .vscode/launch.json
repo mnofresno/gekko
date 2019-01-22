@@ -11,6 +11,7 @@
       "preLaunchTask": null,
       "runtimeExecutable": null,
       "args": [
+        "--instanceName", "TryingInstanceNaming",
         "--ui",
         "--apiPort", "3000",
         "--uiPort", "3000",

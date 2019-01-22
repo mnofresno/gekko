@@ -15,8 +15,11 @@ var debug = config.debug;
 var silent = config.silent;
 
 var sendToParent = function() {
+
   var send = method => (...args) => {
-    process.send({log: method, message: args.join(' ')});
+    var program = util.getProgram();
+    var instanceName = program.instanceName;
+    process.send({log: method, message: `[${instanceName}] ${args.join(' ')}`});
   }
 
   return {
@@ -66,7 +69,7 @@ Log.prototype = {
 
 if(debug)
   Log.prototype.debug = function() {
-    this._write('info', arguments, 'DEBUG');  
+    this._write('info', arguments, 'DEBUG');
   }
 else
   Log.prototype.debug = _.noop;

@@ -180,6 +180,7 @@ program
   .option('-ap, --apiPort <port>', 'HTTP API Port')
   .option('-uip, --uiPort <port>', 'HTTP UI Port')
   .option('-h, --host <host>', 'Hostname')
+  .option('-in, --instanceName <instance>', 'Name of the running instance')
   .option('-s, --secrets <file>', 'Secrets file')
   .parse(process.argv);
 

@@ -1,11 +1,12 @@
 const fs = require('fs');
 const _ = require('lodash');
+const util = require('../../core/util');
 
 const BASEPATH = __dirname + '/../../logs/';
 
 const Logger = function(id) {
 
-  this.fileName = `${id}.log`;
+  this.fileName = `${util.getProgram().instanceName}-${id}.log`;
 
   this.writing = false;
   this.queue = [];
