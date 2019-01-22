@@ -72,9 +72,9 @@
           td {{ logfile.timestamp }}
           td {{ logfile.mtime }}
           td <a v-bind:href="'api/logfiles/' + logfile.name">{{ logfile.id }}</a>
-      component(href='#', v-bind:is='logsPrevDisabled', v-on:click.prevent='logPrevPage') << prev
+      component(href='#', v-bind:is='logsPrevComponentIs', v-on:click.prevent='logPrevPage') << prev
       <span> {{logfiles.page}} / {{logfiles.total_pages}} </span>
-      component(href='#', v-bind:is='logsNextDisabled', v-on:click.prevent='logNextPage') next >>
+      component(href='#', v-bind:is='logsNextComponentIs', v-on:click.prevent='logNextPage') next >>
     a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
     .hr
     h2 Start a new live Gekko
@@ -108,10 +108,10 @@ export default {
     }
   },
   computed: {
-    logsPrevDisabled: function() {
+    logsPrevComponentIs: function() {
       return this.logfiles.page == 1 ? 'span' : 'a';
     },
-    logsNextDisabled: function() {
+    logsNextComponentIs: function() {
       return this.logfiles.page == this.logfiles.total_pages ? 'span' : 'a';
     },
     stratrunners: function() {
