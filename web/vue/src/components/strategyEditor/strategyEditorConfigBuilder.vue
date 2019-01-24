@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import stratPicker from '../global/configbuilder/stratpicker.vue'
 import _ from 'lodash'
 import { get, post, del } from '../../tools/ajax'
 import spinner from '../global/blockSpinner.vue'

@@ -56,33 +56,14 @@
           td
             template(v-if='!gekko.events.tradeCompleted') 0
             template(v-if='gekko.events.tradeCompleted') {{ gekko.events.tradeCompleted.length }}
-    h3 Log files
-    .text(v-if='!logfiles.data.length')
-      p You don't have any logfiles.
-    table.full(v-if='logfiles.data.length')
-      thead
-        tr
-          th type
-          th timestamp
-          th last modified
-          th id
-      tbody
-        tr.clickable(v-for='logfile in logfiles.data')
-          td {{ logfile.type }}
-          td {{ logfile.timestamp }}
-          td {{ logfile.mtime }}
-          td <a v-bind:href="'api/logfiles/' + logfile.name">{{ logfile.id }}</a>
-      component(href='#', v-bind:is='logsPrevComponentIs', v-on:click.prevent='logPrevPage') << prev
-      <span> {{logfiles.page}} / {{logfiles.total_pages}} </span>
-      component(href='#', v-bind:is='logsNextComponentIs', v-on:click.prevent='logNextPage') next >>
-    a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
+    log-files-list()
     .hr
     h2 Start a new live Gekko
     router-link.btn--primary(to='/live-gekkos/new') Start a new live Gekko!
 </template>
 
 <script>
-import { get } from '../../tools/ajax'
+import logFilesList from '../logfiles/list.vue';
 // global moment
 // global humanizeDuration
 
@@ -91,7 +72,6 @@ export default {
     this.timer = setInterval(() => {
       this.now = moment();
     }, 1000);
-    this.updateLogfiles();
   },
   destroyed: function() {
     clearTimeout(this.timer);
@@ -100,75 +80,49 @@ export default {
     return {
       timer: false,
       now: moment(),
-      logfiles: {
-        data: [],
-        total_pages: 0,
-        page: 1,
-      },
-    }
+    };
   },
   computed: {
-    logsPrevComponentIs: function() {
-      return this.logfiles.page == 1 ? 'span' : 'a';
-    },
-    logsNextComponentIs: function() {
-      return this.logfiles.page == this.logfiles.total_pages ? 'span' : 'a';
-    },
     stratrunners: function() {
       return _.values(this.$store.state.gekkos)
         .concat(_.values(this.$store.state.archivedGekkos))
-          .filter(g => {
-            if(g.logType === 'papertrader')
-              return true;
+        .filter(g => {
+          if (g.logType === 'papertrader') return true;
 
-            if(g.logType === 'tradebot')
-              return true;
+          if (g.logType === 'tradebot') return true;
 
-            return false;
-          })
+          return false;
+        });
     },
     watchers: function() {
       return _.values(this.$store.state.gekkos)
         .concat(_.values(this.$store.state.archivedGekkos))
-        .filter(g => g.logType === 'watcher')
-    }
+        .filter(g => g.logType === 'watcher');
+    },
   },
   methods: {
-    logNextPage: function() {
-      this.logfiles.page++;
-      this.updateLogfiles();
-    },
-    logPrevPage: function() {
-      this.logfiles.page--;
-      this.updateLogfiles();
-    },
-    updateLogfiles: function() {
-      get('logfiles?page=' +  this.logfiles.page, (err, response) => {
-        this.logfiles = response;
-      });
-    },
-    humanizeDuration: (n) => window.humanizeDuration(n),
+    humanizeDuration: n => window.humanizeDuration(n),
     moment: mom => moment.utc(mom),
     fmt: mom => moment.utc(mom).format('YYYY-MM-DD HH:mm'),
     round: n => (+n).toFixed(3),
     timespan: function(a, b) {
-      return this.humanizeDuration(this.moment(a).diff(this.moment(b)))
+      return this.humanizeDuration(this.moment(a).diff(this.moment(b)));
     },
     status: state => {
-      if(state.errored)
-        return 'errored';
-      if(state.stopped)
-        return 'stopped';
-      if(state.active)
-        return 'running';
+      if (state.errored) return 'errored';
+      if (state.stopped) return 'stopped';
+      if (state.active) return 'running';
 
       console.log('unknown state:', state);
     },
     report: state => {
       return _.get(state, 'events.latest.performanceReport');
-    }
-  }
-}
+    },
+  },
+  components: {
+    logFilesList,
+  },
+};
 </script>
 
 <style>
@@ -184,6 +138,6 @@ tr.clickable {
   cursor: pointer;
 }
 tr.clickable:hover {
-  background: rgba(216,216,216,.99);
+  background: rgba(216, 216, 216, 0.99);
 }
 </style>
