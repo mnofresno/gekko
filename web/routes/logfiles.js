@@ -5,15 +5,21 @@ const logsDir = __dirname + '/../../logs/';
 const util = require('../../core/util');
 
 function getPaginatedItems(items, page) {
-  var page = page || 1,
-    per_page = 10,
-    offset = (page - 1) * per_page,
+  let per_page = 10,
+    total_pages = Math.ceil(items.length / per_page);
+
+  page = page || 1;
+  page = page <= total_pages ?
+    page :
+    total_pages;
+
+  offset = (page - 1) * per_page,
     paginatedItems = _.rest(items, offset).slice(0, per_page);
   return {
     page: page,
     per_page: per_page,
     total: items.length,
-    total_pages: Math.ceil(items.length / per_page),
+    total_pages: total_pages,
     data: paginatedItems
   };
 }
@@ -34,7 +40,7 @@ module.exports = {
     const logFiles = (yield fs.readdir(logsDir))
       .filter(f => _.last(f, 4).join('') === '.log');
 
-    for(let i = 0; i < logFiles.length; i++) {
+    for (let i = 0; i < logFiles.length; i++) {
       let fileName = logFiles[i];
       let stat = yield fs.stat(logsDir + fileName);
       const parts = fileName.split('-');
@@ -50,5 +56,5 @@ module.exports = {
       });
     }
     this.body = getPaginatedItems(_.filter(logs, x => x.instanceName === instanceName), page);
-   },
+  },
 };

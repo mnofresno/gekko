@@ -17,10 +17,10 @@
           td {{ logfile.mtime }}
           td
             a(v-bind:href="'api/logfiles/' + logfile.name") {{ logfile.id }}
-      component(href='#', v-bind:is='logsPrevComponentIs', v-on:click.prevent='logPrevPage') << prev
-      span  {{logfiles.page}} / {{logfiles.total_pages}}
-      component(href='#', v-bind:is='logsNextComponentIs', v-on:click.prevent='logNextPage')  next >>
-    a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='updateLogfiles') Refresh logfiles list
+      component(href='#', v-bind:is='prevDisabled ? "span" : "a"', v-on:click.prevent='prevPage') << prev
+      span  {{ ` ${logfiles.page} / ${logfiles.total_pages} ` }}
+      component(href='#', v-bind:is='nextDisabled ? "span" : "a"', v-on:click.prevent='nextPage') next >>
+    a.w100--s.btn--primary.new-btn(href='#', v-on:click.prevent='update') Refresh logfiles list
 </template>
 
 <script>
@@ -28,7 +28,7 @@ import { get } from '../../tools/ajax';
 
 export default {
   created: function() {
-    this.updateLogfiles();
+    this.update();
   },
   data: () => {
     return {
@@ -40,24 +40,26 @@ export default {
     };
   },
   computed: {
-    logsPrevComponentIs: function() {
-      return this.logfiles.page == 1 ? 'span' : 'a';
+    prevDisabled: function() {
+      return this.logfiles.page == 1;
     },
-    logsNextComponentIs: function() {
-      return this.logfiles.page == this.logfiles.total_pages ? 'span' : 'a';
+    nextDisabled: function() {
+      return this.logfiles.page == this.logfiles.total_pages;
     },
   },
   methods: {
-    logNextPage: function() {
+    nextPage: function() {
+      if (this.nextDisabled) return;
       this.logfiles.page++;
-      this.updateLogfiles();
+      this.update();
     },
-    logPrevPage: function() {
+    prevPage: function() {
+      if (this.prevDisabled) return;
       this.logfiles.page--;
-      this.updateLogfiles();
+      this.update();
     },
-    updateLogfiles: function() {
-      get('logfiles?page=' + this.logfiles.page, (err, response) => {
+    update: function() {
+      get(`logfiles?page=${this.logfiles.page}`, (err, response) => {
         this.logfiles = response;
       });
     },

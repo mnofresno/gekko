@@ -1,11 +1,10 @@
 {
   "version": "0.2.0",
-  "configurations": [
-
-    {
+  "configurations": [{
       "name": "Launch Server",
       "type": "node",
       "request": "launch",
+      "autoAttachChildProcesses": true,
       "program": "${workspaceRoot}/gekko.js",
       "cwd": "${workspaceRoot}",
       "preLaunchTask": null,
@@ -22,6 +21,16 @@
         "NODE_ENV": "development"
       },
       //"console": "internalConsole",
+      "sourceMaps": false,
+      "outFiles": []
+    },
+    {
+      "name": "Attach child",
+      "type": "node",
+      "request": "attach",
+      "port": 50000,
+      "address": "localhost",
+      "restart": false,
       "sourceMaps": false,
       "outFiles": []
     }
