@@ -1,6 +1,8 @@
 <template lang='pug'>
   section.contain.grd-row
-    .grd-row-col-3-6(v-html='left')
+    .grd-row-col-3-6
+      span(v-html='left')
+      importExport
     .grd-row-col-3-6.txt--center
       img(src='static/gekko.jpg')
       p
@@ -9,6 +11,7 @@
 
 <script>
 import marked from '../../tools/marked';
+import importExport from '../importExport/main.vue';
 
 const left = marked(`
 
@@ -28,7 +31,10 @@ export default {
   data: () => {
     return {
       left
-    }
-  }
+    };
+  },
+  components: {
+    importExport,
+  },
 }
 </script>

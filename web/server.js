@@ -109,6 +109,9 @@ router.post('/api/getCandles', require(ROUTE('getCandles')));
 router.get('/api/logfiles', logfiles.list);
 router.get('/api/logfiles/:id', logfiles.get);
 
+const importExport = require(ROUTE('importExport'));
+router.post('/api/state/import', importExport.import);
+router.get('/api/state/export', importExport.export);
 // incoming WS:
 // wss.on('connection', ws => {
 //   ws.on('message', _.noop);
@@ -117,7 +120,9 @@ router.get('/api/logfiles/:id', logfiles.get);
 app
   .use(cors())
   .use(serve(WEBROOT + 'vue/dist'))
-  .use(bodyParser())
+  .use(bodyParser({
+    jsonLimit: '50mb'
+  }))
   .use(require('koa-logger')())
   .use(router.routes())
   .use(router.allowedMethods());
