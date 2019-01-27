@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+      "name": "Launch Server",
+      "type": "node",
+      "request": "launch",
+      "autoAttachChildProcesses": true,
+      "program": "${workspaceRoot}/gekko.js",
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "args": [
+        "--instanceName", "TryingInstanceNaming",
+        "--ui",
+        "--apiPort", "3000",
+        "--uiPort", "3000",
+        "--host", "localhost",
+        "--secrets", "SECRET-api-keys.json"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      //"console": "internalConsole",
+      "sourceMaps": false,
+      "outFiles": []
+    },
+    {
+      "name": "Attach child",
+      "type": "node",
+      "request": "attach",
+      "port": 50000,
+      "address": "localhost",
+      "restart": false,
+      "sourceMaps": false,
+      "outFiles": []
+    }
+  ]
+}

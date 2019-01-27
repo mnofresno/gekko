@@ -77,6 +77,20 @@ config.mongodb = {
   }]
 }
 
+// Mysql adapter
+config.mysql = {
+  path: 'plugins/mysql',
+  version: 0.1,
+  dependencies: [{
+    module: 'mysql',
+    version: '2.4.0'
+  }],
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "gekko",
+}
+
 config.adviceWriter = {
   enabled: false,
   muteSoft: true,

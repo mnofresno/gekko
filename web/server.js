@@ -79,10 +79,16 @@ const ROUTE = n => WEBROOT + 'routes/' + n;
 
 // attach routes
 const apiKeys = require(ROUTE('apiKeys'));
+const strategies = require(ROUTE('strategies'));
+const logfiles = require(ROUTE('logfiles'));
+
 router.get('/api/info', require(ROUTE('info')));
-router.get('/api/strategies', require(ROUTE('strategies')));
+router.get('/api/strategies', strategies.list);
+router.get('/api/strategies/:stratName', strategies.get);
 router.get('/api/configPart/:part', require(ROUTE('configPart')));
 router.get('/api/apiKeys', apiKeys.get);
+router.post('/api/strategies/:stratName', strategies.post);
+router.delete('/api/strategies/:stratName', strategies.remove);
 
 const listWraper = require(ROUTE('list'));
 router.get('/api/imports', listWraper('imports'));
@@ -100,7 +106,12 @@ router.post('/api/stopGekko', require(ROUTE('stopGekko')));
 router.post('/api/deleteGekko', require(ROUTE('deleteGekko')));
 router.post('/api/getCandles', require(ROUTE('getCandles')));
 
+router.get('/api/logfiles', logfiles.list);
+router.get('/api/logfiles/:id', logfiles.get);
 
+const importExport = require(ROUTE('importExport'));
+router.post('/api/state/import', importExport.import);
+router.get('/api/state/export', importExport.export);
 // incoming WS:
 // wss.on('connection', ws => {
 //   ws.on('message', _.noop);
@@ -109,7 +120,9 @@ router.post('/api/getCandles', require(ROUTE('getCandles')));
 app
   .use(cors())
   .use(serve(WEBROOT + 'vue/dist'))
-  .use(bodyParser())
+  .use(bodyParser({
+    jsonLimit: '50mb'
+  }))
   .use(require('koa-logger')())
   .use(router.routes())
   .use(router.allowedMethods());

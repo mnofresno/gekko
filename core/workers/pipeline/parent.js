@@ -6,7 +6,7 @@ module.exports = (mode, config, callback) => {
     process.execArgv = [];
   }
 
-  var child = fork(__dirname + '/child');
+  var child = fork(__dirname + '/child', process.argv);
 
   // How we should handle client messages depends
   // on the mode of the Pipeline that is being ran.

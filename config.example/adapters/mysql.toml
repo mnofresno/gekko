@@ -1,0 +1,10 @@
+host = "localhost:3306"
+user = "root"
+password = "123456"
+database = "gekko"
+path = "plugins/mysql"
+version = 0.1
+
+[[dependencies]]
+module = "mysql"
+version = "2.16.0"

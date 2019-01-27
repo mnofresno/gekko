@@ -56,12 +56,14 @@
           td
             template(v-if='!gekko.events.tradeCompleted') 0
             template(v-if='gekko.events.tradeCompleted') {{ gekko.events.tradeCompleted.length }}
+    log-files-list()
     .hr
     h2 Start a new live Gekko
     router-link.btn--primary(to='/live-gekkos/new') Start a new live Gekko!
 </template>
 
 <script>
+import logFilesList from '../logfiles/list.vue';
 // global moment
 // global humanizeDuration
 
@@ -69,7 +71,7 @@ export default {
   created: function() {
     this.timer = setInterval(() => {
       this.now = moment();
-    }, 1000)
+    }, 1000);
   },
   destroyed: function() {
     clearTimeout(this.timer);
@@ -77,52 +79,50 @@ export default {
   data: () => {
     return {
       timer: false,
-      now: moment()
-    }
+      now: moment(),
+    };
   },
   computed: {
     stratrunners: function() {
       return _.values(this.$store.state.gekkos)
         .concat(_.values(this.$store.state.archivedGekkos))
-          .filter(g => {
-            if(g.logType === 'papertrader')
-              return true;
+        .filter(g => {
+          if (g.logType === 'papertrader') return true;
 
-            if(g.logType === 'tradebot')
-              return true;
+          if (g.logType === 'tradebot') return true;
 
-            return false;
-          })
+          return false;
+        });
     },
     watchers: function() {
       return _.values(this.$store.state.gekkos)
         .concat(_.values(this.$store.state.archivedGekkos))
-        .filter(g => g.logType === 'watcher')
-    }
+        .filter(g => g.logType === 'watcher');
+    },
   },
   methods: {
-    humanizeDuration: (n) => window.humanizeDuration(n),
+    humanizeDuration: n => window.humanizeDuration(n),
     moment: mom => moment.utc(mom),
     fmt: mom => moment.utc(mom).format('YYYY-MM-DD HH:mm'),
     round: n => (+n).toFixed(3),
     timespan: function(a, b) {
-      return this.humanizeDuration(this.moment(a).diff(this.moment(b)))
+      return this.humanizeDuration(this.moment(a).diff(this.moment(b)));
     },
     status: state => {
-      if(state.errored)
-        return 'errored';
-      if(state.stopped)
-        return 'stopped';
-      if(state.active)
-        return 'running';
+      if (state.errored) return 'errored';
+      if (state.stopped) return 'stopped';
+      if (state.active) return 'running';
 
       console.log('unknown state:', state);
     },
     report: state => {
       return _.get(state, 'events.latest.performanceReport');
-    }
-  }
-}
+    },
+  },
+  components: {
+    logFilesList,
+  },
+};
 </script>
 
 <style>
@@ -138,6 +138,6 @@ tr.clickable {
   cursor: pointer;
 }
 tr.clickable:hover {
-  background: rgba(216,216,216,.99);
+  background: rgba(216, 216, 216, 0.99);
 }
 </style>

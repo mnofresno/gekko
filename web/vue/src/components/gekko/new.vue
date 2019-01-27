@@ -127,7 +127,7 @@ export default {
       // if the user starts a tradebot we do some
       // checks first.
       if(this.config.type === 'tradebot') {
-        if(this.existingTradebot) {
+        if(this.existingTradebot && false) {
           let str = 'You already have a tradebot running on this exchange';
           str += ', you can only run one tradebot per exchange.';
           return alert(str);
@@ -166,7 +166,7 @@ export default {
           // the specified market is already being watched,
           // just start a gekko!
           this.startGekko(this.routeToGekko);
-          
+
         } else {
           // the specified market is not yet being watched,
           // we need to create a watcher
