@@ -1,7 +1,23 @@
 const _ = require('lodash');
 const cache = require('../state/cache');
 const gekkoManager = cache.get('gekkos');
+const apiKeyManager = cache.get('apiKeyManager');
 const moment = require('moment');
+
+const mapGekkoToExport = x => {
+  return {
+    mode: x.mode,
+    config: Object.assign({}, x.config, {
+      mysql: undefined,
+      mongodb: undefined,
+      postgresql: undefined,
+      sqlite: undefined,
+      trader: undefined,
+      adapter: undefined,
+      candleWriter: undefined,
+    })
+  };
+};
 
 module.exports = {
   import: function* () {
@@ -12,9 +28,13 @@ module.exports = {
       const content = Buffer.from(data.content.split(',')[1], 'base64').toString('ascii');
       const gekkos = JSON.parse(content);
       const liveGekkos = gekkos;
+      const baseConfig = require('./baseConfig');
       for (let id in liveGekkos) {
         const gekko = liveGekkos[id];
-        const config = gekko.config;
+        let config = { trader: {} };
+        const keys = apiKeyManager._getApiKeyPair(gekko.config.watch.exchange);
+        _.merge(config, baseConfig, gekko.config);
+        _.merge(config.trader, keys);
         const mode = gekko.mode;
         gekkoManager.add({
           config,
@@ -34,12 +54,7 @@ module.exports = {
   export: function* () {
     const timeStamp = moment().format('YYYY-MM-DD-HH-mm-ss');
     this.set('Content-disposition', `attachment; filename=gekkoexport_${timeStamp}.json`)
-    const data = _.map(Object.values(gekkoManager.list().live), x => {
-      return {
-        mode: x.mode,
-        config: x.config
-      };
-    });
+    const data = _.map(Object.values(gekkoManager.list().live), mapGekkoToExport);
     this.body = JSON.stringify(data);
   },
 };
