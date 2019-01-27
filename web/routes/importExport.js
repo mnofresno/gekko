@@ -11,7 +11,7 @@ module.exports = {
       const data = this.request.body;
       const content = Buffer.from(data.content.split(',')[1], 'base64').toString('ascii');
       const gekkos = JSON.parse(content);
-      const liveGekkos = gekkos.live;
+      const liveGekkos = gekkos;
       for (let id in liveGekkos) {
         const gekko = liveGekkos[id];
         const config = gekko.config;
