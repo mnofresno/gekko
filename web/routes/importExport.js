@@ -34,7 +34,7 @@ module.exports = {
   export: function* () {
     const timeStamp = moment().format('YYYY-MM-DD-HH-mm-ss');
     this.set('Content-disposition', `attachment; filename=gekkoexport_${timeStamp}.json`)
-    const data = _.map(gekkoManager.list(), x => {
+    const data = _.map(Object.values(gekkoManager.list().live), x => {
       return {
         mode: x.mode,
         config: x.config
