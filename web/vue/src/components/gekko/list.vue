@@ -14,7 +14,7 @@
           th last update
           th duration
       tbody
-        tr.clickable(v-for='gekko in watchers', v-on:click='$router.push({path: `/live-gekkos/${gekko.id}`})')
+        tr.clickable(v-for='gekko in watchers', v-on:click='$router.push({path: `/live-bots/${gekko.id}`})')
           td {{ gekko.config.watch.exchange }}
           td {{ gekko.config.watch.currency }}
           td {{ gekko.config.watch.asset }}
@@ -41,7 +41,7 @@
           th type
           th trades
       tbody
-        tr.clickable(v-for='gekko in stratrunners', v-on:click='$router.push({path: `/live-gekkos/${gekko.id}`})')
+        tr.clickable(v-for='gekko in stratrunners', v-on:click='$router.push({path: `/live-bots/${gekko.id}`})')
           td {{ gekko.config.watch.exchange }}
           td {{ gekko.config.watch.currency }}
           td {{ gekko.config.watch.asset }}
@@ -59,7 +59,7 @@
     log-files-list()
     .hr
     h2 Start a new live Gekko
-    router-link.btn--primary(to='/live-gekkos/new') Start a new live Gekko!
+    router-link.btn--primary(to='/live-bots/new') Start a new live Gekko!
 </template>
 
 <script>

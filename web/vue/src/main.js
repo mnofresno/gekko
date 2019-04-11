@@ -31,9 +31,9 @@ const router = new VueRouter({
     { path: '/data', component: data },
     { path: '/data/importer', component: importer },
     { path: '/data/importer/import/:id', component: singleImport },
-    { path: '/live-gekkos', component: gekkoList },
-    { path: '/live-gekkos/new', component: newGekko },
-    { path: '/live-gekkos/:id', component: singleGekko },
+    { path: '/live-bots', component: gekkoList },
+    { path: '/live-bots/new', component: newGekko },
+    { path: '/live-bots/:id', component: singleGekko },
     { path: '/strategy-editor', component: strategyEditor },
   ]
 });

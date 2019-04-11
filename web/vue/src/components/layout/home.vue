@@ -6,7 +6,7 @@
     .grd-row-col-3-6.txt--center
       img(src='static/gekko.jpg')
       p
-        em The most valuable commodity I know of is information.
+        em Adapted by Adrian and Mariano.
 </template>
 
 <script>
@@ -15,15 +15,13 @@ import importExport from '../importExport/main.vue';
 
 const left = marked(`
 
-## Gekko
+## Futura Trading
 
-Gekko is a Bitcoin trading bot and backtesting platform that
+Futura Trading is a Bitcoin trading bot and backtesting platform that
 connects to popular Bitcoin exchanges. It is written in javascript
 and runs on nodejs.
 
-[Find out more](https://gekko.wizb.it/).
 
-*Gekko is 100% free (open source), if you paid for this you have been scammed.*
 
 `);
 

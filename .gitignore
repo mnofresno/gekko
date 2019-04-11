@@ -52,3 +52,4 @@ SECRET-api-keys.json
 exchange/nusadua
 config
 strategies
+web/vue/dist

@@ -94,7 +94,7 @@
           a(v-on:click='deleteGekko', class='w100--s my1 btn--red') Delete Gekko
         p(v-if='isStratrunner && watcher && !isArchived')
           em This gekko gets market data from
-            router-link(:to='"/live-gekkos/" + watcher.id') this market watcher
+            router-link(:to='"/live-bots/" + watcher.id') this market watcher
           | .
       template(v-if='!isLoading')
         h3.contain Market graph
@@ -351,7 +351,7 @@ export default {
 
       post('deleteGekko', { id: this.data.id }, (err, res) => {
         this.$router.push({
-          path: `/live-gekkos/`
+          path: `/live-bots/`
         });
       });
     }

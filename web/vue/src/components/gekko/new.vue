@@ -112,7 +112,7 @@ export default {
 
         this.startGekko((err, resp) => {
           this.$router.push({
-            path: `/live-gekkos/${resp.id}`
+            path: `/live-bots/${resp.id}`
           });
         });
       }
@@ -150,12 +150,12 @@ export default {
         if(this.existingMarketWatcher) {
           alert('This market is already being watched, redirecting you now...');
           this.$router.push({
-            path: `/live-gekkos/${this.existingMarketWatcher.id}`
+            path: `/live-bots/${this.existingMarketWatcher.id}`
           });
         } else {
           this.startWatcher((error, resp) => {
             this.$router.push({
-              path: `/live-gekkos/${resp.id}`
+              path: `/live-bots/${resp.id}`
             });
           });
         }
@@ -183,7 +183,7 @@ export default {
         return console.error(err, resp.error);
 
       this.$router.push({
-        path: `/live-gekkos/${resp.id}`
+        path: `/live-bots/${resp.id}`
       });
     },
     startWatcher: function(next) {
